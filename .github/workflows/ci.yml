@@ -39,8 +39,8 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t alokratran/devops-demo:1.0 .
+          docker build -t alokratan/devops-demo:1.0 .
 
       - name: Push Docker image
         run: |
-          docker push alokratran/devops-demo:1.0
+          docker push alokratan/devops-demo:1.0
