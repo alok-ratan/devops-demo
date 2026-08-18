@@ -9,7 +9,7 @@ def test_root():
     response = client.get("/")
 
     assert response.status_code == 200
-    assert response.json()["message"] == "Hello DevOps!"
+    assert response.json()["message"] == "Hello DevOps v2!"
 
 
 def test_health():

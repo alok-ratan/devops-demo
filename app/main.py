@@ -29,8 +29,8 @@ users = [
 @app.get("/")
 def root():
     return {
-        "message": "Hello DevOps!",
-        "version": "1.0.0"
+        "message": "Hello DevOps v2!",
+        "version": "2.0.0"
     }
 
 
