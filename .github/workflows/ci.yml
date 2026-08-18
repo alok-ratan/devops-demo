@@ -1,11 +1,7 @@
-name: CI
+name: CI/CD
 
 on:
   push:
-    branches:
-      - main
-
-  pull_request:
     branches:
       - main
 
@@ -34,8 +30,8 @@ jobs:
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build Docker image
         run: |
@@ -44,3 +40,25 @@ jobs:
       - name: Push Docker image
         run: |
           docker push alokratan/devops-demo:1.0
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to Ubuntu server
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          script: |
+            docker pull alokratan/devops-demo:1.0
+            docker stop devops-demo || true
+            docker rm devops-demo || true
+
+            docker run -d \
+              --restart unless-stopped \
+              -p 8000:8000 \
+              --name devops-demo \
+              alokratan/devops-demo:1.0
